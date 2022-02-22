@@ -19,7 +19,7 @@ function App() {
         method: "eth_requestAccounts",
       });
 
-      console.log("Connected", accounts[0]);
+      console.log("Connected", accounts.toString());
     } catch (error) {
       console.log(error);
     }
