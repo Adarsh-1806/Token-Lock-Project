@@ -14,7 +14,7 @@ contract Token{
         owner = msg.sender;
         balance[owner] = totalSupply;
     }
-    function transfer(uint _amount,address _to) external {
+    function transferToken(uint _amount,address _to) public {
         require(_amount <= balance[msg.sender],"Not Enough Tokens");
         balance[msg.sender] -= _amount;
         balance[_to] += _amount;
