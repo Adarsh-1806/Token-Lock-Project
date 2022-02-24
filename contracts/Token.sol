@@ -1,25 +1,34 @@
-// SPDX-License-Identifier: GPL-3.0
-
+// SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract Token{
-    string public name="Adarsh Token";
-    string public symbol="AT";
-    uint public totalSupply = 100000;
+contract Token is ERC20 {
 
-    address public owner;
-    mapping(address=>uint) balance;
-
-    constructor(){
-        owner = msg.sender;
-        balance[owner] = totalSupply;
+    constructor(uint256 initialSupply) ERC20("Adarsh", "ADT") {
+        _mint(msg.sender, initialSupply);
     }
-    function transferToken(uint _amount,address _to) public {
-        require(_amount <= balance[msg.sender],"Not Enough Tokens");
-        balance[msg.sender] -= _amount;
-        balance[_to] += _amount;
+}
+contract Lock{
+    struct Details{
+        address tokenAddress;
+        address owner;
+        uint lockedTime;
+        uint unlockTime;
+        uint amount;
     }
-    function balanceOf(address _account) public view returns(uint){
-        return balance[_account];
+    mapping(address=>Details) wallets;
+    function lockToken(address _tokenAddress,uint _amount,uint _unlockTime, address _owner) public{
+        wallets[_owner].tokenAddress = _tokenAddress;
+        wallets[_owner].owner = _owner;
+        wallets[_owner].lockedTime = block.timestamp;
+        wallets[_owner].unlockTime = block.timestamp + _unlockTime;
+        wallets[_owner].amount = _amount;
+        // Token(_tokenAddress).transferFrom(msg.sender,address(this),_amount);           
+    }
+    function contractTokens(address _tokenAddress) public view returns(uint){
+        return Token(_tokenAddress).balanceOf(address(this));
+    }
+    function getDetails(address _address) public view returns(Details memory){
+        return wallets[_address];
     }
 }
