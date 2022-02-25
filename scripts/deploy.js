@@ -1,15 +1,21 @@
 const hre = require("hardhat");
-
 async function main() {
-  const Greeter = await hre.ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
-  await greeter.deployed();
-  console.log("Greeter deployed to:", greeter.address);
+  // const Greeter = await hre.ethers.getContractFactory("Greeter");
+  // const greeter = await Greeter.deploy("Hello, Hardhat!");
+  // await greeter.deployed();
+  // console.log("Greeter deployed to:", greeter.address);
 
   const Token = await hre.ethers.getContractFactory("Token");
-  const token = await Token.deploy();
+  const token = await Token.deploy(1000000);
   await token.deployed();
-  console.log("Token deployed to:", token.address);
+  let owner = await hre.ethers.getSigner();
+  console.log("ERC20 contract address:", token.address);
+  console.log("Owner Balance:",await token.balanceOf(owner.address));
+
+  const Lock = await hre.ethers.getContractFactory("Lock");
+  const lock = await Lock.deploy();
+  await lock.deployed();
+  console.log("Lock contract address:", token.address);
   // console.log(token.owner().call());
 }
 

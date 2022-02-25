@@ -43,21 +43,36 @@ describe("Testing", function () {
 
   it("Create and lock token into contract", async function () {
     const tokenAdd = token.address;
+    const lockAdd = lock.address;
+    const ownerAdd = owner.address;
     const reciever = addr1.address;
     console.log("Contract Address:",tokenAdd);
     //now lock the tokens in contract
-    // expect(await token.balanceOf(owner.address)).to.equal(10000);
-    await lock.connect(owner).lockToken(tokenAdd,500,10,reciever);
-    await token.transfer(lock.address,500);
-
-    await token.transfer(addr1.address, 2000);
-    await lock.connect(addr1).lockToken(tokenAdd,1000,10,reciever);
-    await token.connect(addr1).transfer(lock.address,1000);
-
-    console.log("contract Balance:" ,await lock.contractTokens(tokenAdd));
-
-    const tokenDetail = await lock.getDetails(addr1.address);
-    console.log(tokenDetail);
-    // console.log("After:: owner:",token.balanceOf(owner.address)," addr1:",token.balanceOf(addr1.address," Contract:",token.balanceOf(lock.address)));
+    expect(await token.balanceOf(owner.address)).to.equal(10000);
+    await lock.connect(owner).lockToken(tokenAdd,1000,5);
+    await token.transfer(lockAdd,1000);
+    
+    await token.transfer(reciever, 2000);
+    await lock.connect(addr1).lockToken(tokenAdd,1500,5);
+    await token.connect(addr1).transfer(lockAdd,1500);
+    
+    console.log("Token Balance in Contract:" ,await lock.tokenBalanceOf(tokenAdd));
+    console.log("Owner's Token:" ,await lock.getAmountOf(ownerAdd));
+    console.log("Addr1's Token:" ,await lock.getAmountOf(reciever));
+    
+    function sleep(milliseconds) {
+      const date = Date.now();
+      let currentDate = null;
+      do {
+        currentDate = Date.now();
+      } while (currentDate - date < milliseconds);
+    }
+    sleep(4000);
+    console.log("Now withdraw before time");
+    await lock.connect(owner).withDrawToken(0);
+    await lock.connect(addr1).withDrawToken(0);
+    console.log("Token Balance in Contract:" ,await lock.tokenBalanceOf(tokenAdd));
+    console.log("Owner's Token:" ,await lock.getAmountOf(ownerAdd));
+    console.log("Addr1's Token:" ,await lock.getAmountOf(reciever));
   });
 });

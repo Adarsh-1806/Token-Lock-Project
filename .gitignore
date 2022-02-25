@@ -2,6 +2,10 @@
 
 # dependencies
 /node_modules
+/cache
+/src/artifacts/@openzeppelin
+/src/artifacts/build-info
+/src/artifacts/hardhat
 /.pnp
 .pnp.js
 
