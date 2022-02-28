@@ -16,7 +16,7 @@ beforeEach(async function(){
   [owner,addr1] = await ethers.getSigners();
 });
 describe("Testing", function () {
-  it("Should return the new greeting once it's changed", async function () {
+  // it("Should return the new greeting once it's changed", async function () {
   //   const Greeter = await ethers.getContractFactory("Greeter");
   //   const greeter = await Greeter.deploy("Hello, world!");
   //   await greeter.deployed();
@@ -39,9 +39,20 @@ describe("Testing", function () {
   //   expect(await token.balanceOf(owner.address)).to.equal(10000-500);
   //   expect(await token.balanceOf(addr1.address)).to.equal(500);
   //   console.log(await token.balanceOf(addr1.address));
-  });
+  // });
 
-  it("Create and lock token into contract", async function () {
+  it("Tesing ERC20 functions",async function () {
+    console.log("Token Deployed...");
+    console.log("Token Balance(owner):",await token.balanceOf(owner.address));
+    console.log("Token Balance(owner):",await token.balanceOf(addr1.address));
+    
+    console.log("Transfer 1000 token to addr1...");
+    await token.transfer(addr1.address,1000);
+    console.log("Token Balance(owner):",await token.balanceOf(owner.address));
+    console.log("Token Balance(owner):",await token.balanceOf(addr1.address));
+
+  });
+  it("Lock token into contract", async function () {
     const tokenAdd = token.address;
     const lockAdd = lock.address;
     const ownerAdd = owner.address;
@@ -68,7 +79,8 @@ describe("Testing", function () {
       } while (currentDate - date < milliseconds);
     }
     sleep(4000);
-    console.log("Now withdraw before time");
+    console.log("Now withdraw Token");
+    await lock.connect(owner).withDrawToken(0);
     await lock.connect(owner).withDrawToken(0);
     await lock.connect(addr1).withDrawToken(0);
     console.log("Token Balance in Contract:" ,await lock.tokenBalanceOf(tokenAdd));
