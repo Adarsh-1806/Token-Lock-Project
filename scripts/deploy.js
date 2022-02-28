@@ -10,12 +10,12 @@ async function main() {
   await token.deployed();
   let owner = await hre.ethers.getSigner();
   console.log("ERC20 contract address:", token.address);
-  console.log("Owner Balance:",await token.balanceOf(owner.address));
+  console.log("Owner:",await owner.address);
 
   const Lock = await hre.ethers.getContractFactory("Lock");
   const lock = await Lock.deploy();
   await lock.deployed();
-  console.log("Lock contract address:", token.address);
+  console.log("Lock contract address:", lock.address);
   // console.log(token.owner().call());
 }
 

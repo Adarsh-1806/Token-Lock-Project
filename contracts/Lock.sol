@@ -1,21 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 import "./Token.sol";
-contract Lock{
-    struct Details{
+
+contract Lock {
+    struct Details {
         address tokenAddress;
         address owner;
-        uint lockedTime;
-        uint unlockTime;
-        uint amount;
+        uint256 lockedTime;
+        uint256 unlockTime;
+        uint256 amount;
         bool withdrawed;
     }
-    uint id=0;
-    mapping(uint=>Details) lockedTokens;
-    mapping(address=>uint[]) depositor;
-    mapping(address=>uint[]) tokenDetail;
+    uint256 id = 0;
+    uint256[] allIds;
+    mapping(uint256 => Details) lockedTokens;
+    mapping(address => uint256[]) depositor;
+    mapping(address => uint256[]) tokenDetail;
+    mapping(address => mapping(address => uint256)) myBalance;
 
-    function lockToken(address _tokenAddress,uint _amount,uint _unlockTime) public{
+    function lockToken(
+        address _tokenAddress,
+        uint256 _amount,
+        uint256 _unlockTime
+    ) public {
         lockedTokens[id].tokenAddress = _tokenAddress;
         lockedTokens[id].owner = msg.sender;
         lockedTokens[id].lockedTime = block.timestamp;
@@ -23,26 +30,58 @@ contract Lock{
         lockedTokens[id].amount = _amount;
         lockedTokens[id].withdrawed = false;
 
+        myBalance[msg.sender][_tokenAddress] += _amount;
         depositor[msg.sender].push(id);
+        allIds.push(id);
         tokenDetail[_tokenAddress].push(id);
         id++;
-        // Token(_tokenAddress).transfer(_to,_amount);           
+        // Token(_tokenAddress).transfer(_to,_amount);
     }
-    function tokenBalanceOf(address _tokenAddress) public view returns(uint){
+
+    function tokenBalanceOf(address _tokenAddress)
+        public
+        view
+        returns (uint256)
+    {
         return Token(_tokenAddress).balanceOf(address(this));
     }
-    function getAmountOf(address _address) public view returns(uint){
-        return lockedTokens[depositor[_address][0]].amount;
+
+    function myTokenBalance(address _tokenAddress)
+        public
+        view
+        returns (uint256)
+    {
+        return myBalance[msg.sender][_tokenAddress];
     }
-    function withDrawToken(uint _id) public{
-        require(_id <= depositor[msg.sender].length,"Please Enter valid Id");
-        require(msg.sender == lockedTokens[depositor[msg.sender][_id]].owner,"You are not authorized for withdrawal");
-        require(block.timestamp >= lockedTokens[depositor[msg.sender][_id]].unlockTime,"You can't withdraw token before unlocktime");
-        require(lockedTokens[depositor[msg.sender][_id]].withdrawed==false,"You have already withdrawed tokens");
-        uint _amount = lockedTokens[depositor[msg.sender][_id]].amount;
+
+    function getdetailsOf(uint256 _index) public view returns (Details memory) {
+        return lockedTokens[_index];
+    }
+
+    function withDrawToken(uint256 _id) public {
+        require(_id <= depositor[msg.sender].length, "Please Enter valid Id");
+        require(
+            msg.sender == lockedTokens[depositor[msg.sender][_id]].owner,
+            "You are not authorized for withdrawal"
+        );
+        require(
+            block.timestamp >=
+                lockedTokens[depositor[msg.sender][_id]].unlockTime,
+            "You can't withdraw token before unlocktime"
+        );
+        require(
+            lockedTokens[depositor[msg.sender][_id]].withdrawed == false,
+            "You have already withdrawed tokens"
+        );
+        uint256 _amount = lockedTokens[depositor[msg.sender][_id]].amount;
         lockedTokens[depositor[msg.sender][_id]].amount = 0;
         lockedTokens[depositor[msg.sender][_id]].withdrawed = true;
-        address _tokenAddress = lockedTokens[depositor[msg.sender][_id]].tokenAddress;
-        Token(_tokenAddress).transfer(msg.sender,_amount);
+        address _tokenAddress = lockedTokens[depositor[msg.sender][_id]]
+            .tokenAddress;
+        Token(_tokenAddress).transfer(msg.sender, _amount);
+    }
+
+    function getAllIds() public view returns (uint256[] memory) {
+        return allIds;
     }
 }
