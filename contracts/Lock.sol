@@ -35,7 +35,6 @@ contract Lock {
         allIds.push(id);
         tokenDetail[_tokenAddress].push(id);
         id++;
-        // Token(_tokenAddress).transfer(_to,_amount);
     }
 
     function tokenBalanceOf(address _tokenAddress)
@@ -54,7 +53,7 @@ contract Lock {
         return myBalance[msg.sender][_tokenAddress];
     }
 
-    function getdetailsOf(uint256 _index) public view returns (Details memory) {
+    function getDetailsOf(uint256 _index) public view returns (Details memory) {
         return lockedTokens[_index];
     }
 
