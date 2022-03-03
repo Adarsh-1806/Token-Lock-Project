@@ -10,13 +10,11 @@ function Connect(props) {
         return;
       }
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      await provider.send("eth_requestAccounts", []);
       props.editStateData({
         ...props.stateData,
         provider,
-        signer,
         connected: true,
-        account: await signer.getAddress(),
       });
     } catch (error) {
       console.log(error);
@@ -26,18 +24,29 @@ function Connect(props) {
     props.editStateData({
       ...props.stateData,
       provider: null,
-      signer: null,
-      account: null,
+      signer:null,
+      account:null,
       connected: false,
     });
   };
+  async function getBalance(){
+    const signer = props.stateData.provider.getSigner();
+    const account = await signer.getAddress();
+    const balance = await props.stateData.provider.getBalance(account);
+    console.log(ethers.utils.formatEther(balance));
+    return [ethers.utils.formatEther(balance),account];
+  }
+  const dt = getBalance();
   if (props.stateData.connected) {
+    console.log(dt);
     return (
       <div className="topHeader">
-        <span className="btns">{props.stateData.account}</span>
+        <span className="btns">{dt[1]}</span>
         <button className="btns" onClick={disConnectWallet}>
           disconnect
         </button>
+        <br />
+        <p>Balance:{dt[0]}</p>
       </div>
     );
   } else {
