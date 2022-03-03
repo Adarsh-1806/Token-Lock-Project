@@ -1,12 +1,28 @@
 import React from "react";
-import { ethers } from "ethers";
 
-const Transaction = (props) => {
-  //   const ids = await props.stateData.lockContract.getAllIds;
-  async function allTransactions() {
-    const tnxs = await props.contract.getAllIds;
-    console.log(tnxs);
-  }
-  return <button onClick={allTransactions}>Transactions</button>;
-};
+async function Transaction(props) {
+  const ids = await props.contract.getAllIds();
+  console.log(ids);
+
+  return (
+    <>
+      <table>
+        <tr>
+          <th>Token</th>
+          <th>Amount</th>
+          <th>UnlockTime</th>
+          <th>Owner</th>
+        </tr>
+        {/* {tnxs.map((val) => (
+          <tr>
+            <td>{val.tokenAddress}</td>
+            <td>{val.amount}</td>
+            <td>{val.unlockTime}</td>
+            <td>{val.owner}</td>
+          </tr>
+        ))} */}
+      </table>
+    </>
+  );
+}
 export default Transaction;

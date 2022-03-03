@@ -1,4 +1,5 @@
 import "./App.css";
+import "./components/connect.css";
 // import { ethers } from "ethers";
 import React, { useState } from "react";
 import Connect from "./components/Connect";
@@ -39,7 +40,7 @@ function App() {
     } else {
       console.log("Amount should be less than balance");
     }
-    sleep(30000);
+    sleep(15000);
     let afterBalance = await state.tokenContract.balanceOf(state.account);
     let contractTokenBalance = await state.lockContract.tokenBalanceOf(
       tokenAddress
@@ -54,10 +55,17 @@ function App() {
     console.log(state);
   }
   async function withdrawToken() {}
+  const walletBalance = async () => {
+    const b = await state.provider.getBalance(state.account);
+    console.log(b);
+    console.log(state.account);
+    return b;
+  };
   return (
     <>
       <Connect stateData={state} editStateData={setState} />
-      <Transaction contract={state.lockContract} />
+      <br />
+      {/* <Transaction contract={state.lockContract} /> */}
       <div className="App">
         <div className="addToken">
           Tokens:
@@ -80,6 +88,7 @@ function App() {
           <button onClick={withdrawToken}>withdrawToken</button>
         </div>
         <button onClick={getState}>getState</button>
+        <span>Balance :{walletBalance}</span>
       </div>
     </>
   );
