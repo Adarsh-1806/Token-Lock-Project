@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { ethers } from "ethers";
 
 function Connect(props) {
+  const [data, setData] = useState({
+    balance: null,
+  });
   const connectWallet = async () => {
     try {
       const { ethereum } = window;
@@ -11,6 +14,11 @@ function Connect(props) {
       }
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const account = await signer.getAddress();
+      const balance = await provider.getBalance(account);
+      const balanceInEth = ethers.utils.formatEther(balance);
+      setData({ balance: balanceInEth, account });
       props.editStateData({
         ...props.stateData,
         provider,
@@ -24,29 +32,22 @@ function Connect(props) {
     props.editStateData({
       ...props.stateData,
       provider: null,
-      signer:null,
-      account:null,
+      signer: null,
+      account: null,
       connected: false,
     });
   };
-  async function getBalance(){
-    const signer = props.stateData.provider.getSigner();
-    const account = await signer.getAddress();
-    const balance = await props.stateData.provider.getBalance(account);
-    console.log(ethers.utils.formatEther(balance));
-    return [ethers.utils.formatEther(balance),account];
-  }
-  const dt = getBalance();
+
   if (props.stateData.connected) {
-    console.log(dt);
+    console.log(data.account, data.balance);
     return (
       <div className="topHeader">
-        <span className="btns">{dt[1]}</span>
+        <span className="btns">{data.account}</span>
         <button className="btns" onClick={disConnectWallet}>
           disconnect
         </button>
         <br />
-        <p>Balance:{dt[0]}</p>
+        <p>Balance:{data.balance}</p>
       </div>
     );
   } else {
