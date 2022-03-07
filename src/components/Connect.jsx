@@ -18,10 +18,11 @@ function Connect(props) {
       const account = await signer.getAddress();
       const balance = await provider.getBalance(account);
       const balanceInEth = ethers.utils.formatEther(balance);
-      setData({ balance: balanceInEth, account });
+      setData({ balance: balanceInEth, account: account });
       props.editStateData({
         ...props.stateData,
         provider,
+        account,
         isConnected: true,
       });
     } catch (error) {

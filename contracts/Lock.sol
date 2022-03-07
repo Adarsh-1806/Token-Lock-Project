@@ -29,6 +29,8 @@ contract Lock {
         uint256 _amount,
         uint256 _unlockTime
     ) public {
+        Token(_tokenAddress).transferFrom(msg.sender, address(this), _amount);
+
         lockedTokens[id].tokenAddress = _tokenAddress;
         lockedTokens[id].owner = msg.sender;
         lockedTokens[id].lockedTime = block.timestamp;
@@ -98,11 +100,11 @@ contract Lock {
             "You have already withdrawed tokens"
         );
         uint256 _amount = lockedTokens[depositor[msg.sender][_id]].amount;
-        lockedTokens[depositor[msg.sender][_id]].amount = 0;
-        lockedTokens[depositor[msg.sender][_id]].withdrawed = true;
         address _tokenAddress = lockedTokens[depositor[msg.sender][_id]]
             .tokenAddress;
         Token(_tokenAddress).transfer(msg.sender, _amount);
+        lockedTokens[depositor[msg.sender][_id]].amount = 0;
+        lockedTokens[depositor[msg.sender][_id]].withdrawed = true;
     }
 
     /**
@@ -111,5 +113,13 @@ contract Lock {
      */
     function getAllIds() public view returns (uint256[] memory) {
         return allIds;
+    }
+
+    /**
+     * @dev function get array Ids of Deposiors
+     * @return array of ids
+     */
+    function myTransactions() public view returns (uint256[] memory) {
+        return depositor[msg.sender];
     }
 }

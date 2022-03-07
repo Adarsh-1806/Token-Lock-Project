@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import Connect from "./components/Connect";
-import AddToken from "./components/AddToken";
 import TableContent from "./components/TableContent";
 import LockToken from "./components/LockToken";
 import "./App.css";
@@ -17,9 +16,8 @@ function App() {
   return (
     <div className="main-body">
       <Connect stateData={state} editStateData={setState} />
-      {/* <AddToken stateData={state} /> */}
-      <LockToken />
-      <TableContent />
+      <LockToken stateData={state} editStateData={setState} />
+      <TableContent stateData={state} editStateData={setState} />
       <br></br>
       <button onClick={getState}>GetState</button>
     </div>
