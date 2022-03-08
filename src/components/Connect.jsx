@@ -1,59 +1,28 @@
-import React, { useState } from "react";
-import { ethers } from "ethers";
-
-function Connect(props) {
-  const [data, setData] = useState({
-    balance: null,
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { connect, disconnect } from "../actions/index";
+function Connect() {
+  const [data, setData] = useState({});
+  const state = useSelector((state) => state.connectMetamask);
+  const dispatch = useDispatch();
+  state.then((dt) => {
+    setData(dt);
   });
-  const connectWallet = async () => {
-    try {
-      const { ethereum } = window;
-      if (!ethereum) {
-        alert("Please install MetaMask!");
-        return;
-      }
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const account = await signer.getAddress();
-      const balance = await provider.getBalance(account);
-      const balanceInEth = ethers.utils.formatEther(balance);
-      setData({ balance: balanceInEth, account });
-      props.editStateData({
-        ...props.stateData,
-        provider,
-        connected: true,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const disConnectWallet = async () => {
-    props.editStateData({
-      ...props.stateData,
-      provider: null,
-      signer: null,
-      account: null,
-      connected: false,
-    });
-  };
-
-  if (props.stateData.connected) {
-    console.log(data.account, data.balance);
+  if (data.isConnected) {
     return (
       <div className="topHeader">
         <span className="btns">{data.account}</span>
-        <button className="btns" onClick={disConnectWallet}>
+        <button className="btns" onClick={() => dispatch(disconnect())}>
           disconnect
         </button>
         <br />
-        <p>Balance:{data.balance}</p>
+        <p>Balance:{data.balanceInEth}</p>
       </div>
     );
   } else {
     return (
       <div className="topHeader">
-        <button className="btns" onClick={connectWallet}>
+        <button className="btns" onClick={() => dispatch(connect())}>
           Connect
         </button>
       </div>

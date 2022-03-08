@@ -1,22 +1,17 @@
+import React from "react";
 import "./App.css";
-import "./components/connect.css";
-import React, { useState } from "react";
+import "./components/Connect.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Connect from "./components/Connect";
-import Transaction from "./components/Transaction";
+import ContractData from "./components/ContractData";
+import TableContent from "./components/TableContent";
 
 function App() {
-  const [state, setState] = useState({
-    connected: false,
-  });
-  function showState() {
-    console.log(state);
-  }
   return (
-    <>
-      <Connect stateData={state} editStateData={setState} />
-      {/* <Transaction /> */}
-      <button onClick={showState}>GetState</button>
-    </>
+    <div className="main-body">
+      <Connect />
+      <ContractData />
+    </div>
   );
 }
 
