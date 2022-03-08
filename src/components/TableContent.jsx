@@ -1,10 +1,27 @@
+import { useState } from "react";
 function TableContent(props) {
-  const tnxs = [];
+  const [state, setState] = useState({
+    tnxs: [],
+  });
   async function getDetails() {
+    // const tnxs = [];
     const ids = await props.stateData.lockContract.myTransactions();
     console.log(ids);
     for (let i = 0; i < ids.length; i++) {
-      tnxs.push(await props.stateData.lockContract.getDetailsOf(i));
+      const detail = await props.stateData.lockContract.getDetailsOf(i);
+      const obj = {
+        id: parseInt(detail.id._hex, 16),
+        owner: detail.owner,
+        tokenAddress: detail.tokenAddress,
+        withdrawed: detail.withdrawed,
+        amount: parseInt(detail.amount._hex, 16),
+        lockedTime: parseInt(detail.lockedTime._hex, 16),
+        unlockTime: parseInt(detail.unlockTime._hex, 16),
+      };
+      const tnxs = [...state.tnxs];
+      console.log(tnxs);
+      tnxs.push(obj);
+      setState({ tnxs });
     }
   }
   return (
@@ -21,8 +38,9 @@ function TableContent(props) {
           </tr>
         </thead>
         <tbody>
-          {tnxs.map((item) => (
-            <tr key={item.unlockTime}>
+          {state.tnxs.map((item) => (
+            <tr key={item.id}>
+              <td>{item.id}</td>
               <td>ADT</td>
               <td>{item.amount}</td>
               <td>{item.unlockTime}</td>
@@ -30,23 +48,6 @@ function TableContent(props) {
               <td />
             </tr>
           ))}
-          {/* <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr> */}
         </tbody>
       </table>
     </>

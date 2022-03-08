@@ -4,6 +4,7 @@ import "./Token.sol";
 
 contract Lock {
     struct Details {
+        uint256 id;
         address tokenAddress;
         address owner;
         uint256 lockedTime;
@@ -31,6 +32,7 @@ contract Lock {
     ) public {
         Token(_tokenAddress).transferFrom(msg.sender, address(this), _amount);
 
+        lockedTokens[id].id = id;
         lockedTokens[id].tokenAddress = _tokenAddress;
         lockedTokens[id].owner = msg.sender;
         lockedTokens[id].lockedTime = block.timestamp;
@@ -87,24 +89,22 @@ contract Lock {
     function withDrawToken(uint256 _id) public {
         require(_id <= depositor[msg.sender].length, "Please Enter valid Id");
         require(
-            msg.sender == lockedTokens[depositor[msg.sender][_id]].owner,
+            msg.sender == lockedTokens[_id].owner,
             "You are not authorized for withdrawal"
         );
         require(
-            block.timestamp >=
-                lockedTokens[depositor[msg.sender][_id]].unlockTime,
+            block.timestamp >= lockedTokens[_id].unlockTime,
             "You can't withdraw token before unlocktime"
         );
         require(
-            lockedTokens[depositor[msg.sender][_id]].withdrawed == false,
+            lockedTokens[_id].withdrawed == false,
             "You have already withdrawed tokens"
         );
-        uint256 _amount = lockedTokens[depositor[msg.sender][_id]].amount;
-        address _tokenAddress = lockedTokens[depositor[msg.sender][_id]]
-            .tokenAddress;
+        uint256 _amount = lockedTokens[_id].amount;
+        address _tokenAddress = lockedTokens[_id].tokenAddress;
         Token(_tokenAddress).transfer(msg.sender, _amount);
-        lockedTokens[depositor[msg.sender][_id]].amount = 0;
-        lockedTokens[depositor[msg.sender][_id]].withdrawed = true;
+        lockedTokens[_id].amount = 0;
+        lockedTokens[_id].withdrawed = true;
     }
 
     /**
