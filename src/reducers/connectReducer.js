@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+
 async function connectWallet() {
   try {
     const { ethereum } = window;

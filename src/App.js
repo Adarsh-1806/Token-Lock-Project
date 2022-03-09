@@ -11,6 +11,7 @@ function App() {
     <div className="main-body">
       <Connect />
       <ContractData />
+      <TableContent />
     </div>
   );
 }

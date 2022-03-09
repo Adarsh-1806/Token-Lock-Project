@@ -8,9 +8,16 @@ export const disconnect = () => {
     type: "DISCONNECT",
   };
 };
-export const getContract = (props) => {
+export const getContract = (address, signer, account) => {
   return {
     type: "GETCONTRACT",
-    tokenAddress: props,
+    tokenAddress: address,
+    signer: signer,
+    account: account,
+  };
+};
+export const getTransactiondata = () => {
+  return {
+    type: "GETTRANSACTIONDATA",
   };
 };

@@ -1,56 +1,79 @@
-import { useState } from "react";
-function TableContent(props) {
-  const [state, setState] = useState({
-    tnxs: [],
-  });
-  async function getDetails() {
-    // const tnxs = [];
-    const ids = await props.stateData.lockContract.myTransactions();
-    console.log(ids);
-    for (let i = 0; i < ids.length; i++) {
-      const detail = await props.stateData.lockContract.getDetailsOf(i);
-      const obj = {
-        id: parseInt(detail.id._hex, 16),
-        owner: detail.owner,
-        tokenAddress: detail.tokenAddress,
-        withdrawed: detail.withdrawed,
-        amount: parseInt(detail.amount._hex, 16),
-        lockedTime: parseInt(detail.lockedTime._hex, 16),
-        unlockTime: parseInt(detail.unlockTime._hex, 16),
-      };
-      const tnxs = [...state.tnxs];
-      console.log(tnxs);
-      tnxs.push(obj);
-      setState({ tnxs });
-    }
+import { useState, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import store from "../store";
+function TableContent() {
+  const stateData = useSelector((state) => state.getContract);
+  const [contract, setContract] = useState(null);
+  const [connect, setconnect] = useState();
+  const [transaction, setTransaction] = useState([]);
+  if (stateData.lockContract !== null && contract === null) {
+    stateData.then((dt) => {
+      setContract(dt.lockContract);
+    });
   }
+  async function getdata() {
+    const arr = await contract.myTransactions();
+    const tnx = [];
+    for (let i = 0; i < arr.length; i++) {
+      const e = parseInt(arr[i]._hex, 16);
+      const trns = await contract.getDetailsOf(e);
+      const obj = {
+        id: parseInt(trns.id._hex, 16),
+        owner: trns.owner,
+        tokenAddress: trns.tokenAddress,
+        withdrawed: trns.withdrawed,
+        amount: parseInt(trns.amount._hex, 16),
+        lockedTime: parseInt(trns.lockedTime._hex, 16),
+        unlockTime: parseInt(trns.unlockTime._hex, 16),
+      };
+      tnx.push(obj);
+    }
+    setTransaction(tnx);
+  }
+  async function withdrawToken() {
+    console.log("Button Clicked");
+  }
+
   return (
     <>
-      <button onClick={getDetails}>getDetails</button>
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">#</th>
+            <th scope="col">Id</th>
             <th scope="col">Token</th>
             <th scope="col">Amount</th>
+            <th scope="col">LockedTime</th>
             <th scope="col">UnlockTime</th>
             <th scope="col">Owner</th>
+            <th scope="col">Withdrawed</th>
           </tr>
         </thead>
         <tbody>
-          {state.tnxs.map((item) => (
+          {transaction.map((item) => (
             <tr key={item.id}>
               <td>{item.id}</td>
               <td>ADT</td>
               <td>{item.amount}</td>
+              <td>{item.lockedTime}</td>
               <td>{item.unlockTime}</td>
               <td>{item.owner}</td>
+              <td>
+                <button
+                  className="btn btn-success"
+                  onClick={withdrawToken}
+                  disabled={item.withdrawed}
+                >
+                  withdraw
+                </button>
+              </td>
               <td />
             </tr>
           ))}
         </tbody>
       </table>
+      <button onClick={getdata}>My Transactions</button>
     </>
   );
+  // }
 }
 export default TableContent;
