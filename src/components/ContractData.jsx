@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import CardComponent from "./CardComponent";
 import { getContract } from "../actions/index";
 import { Dropdown } from "react-bootstrap";
+import "./ContractData.css";
 function ContractData() {
   const connectdata = useSelector((state) => state.connectMetamask);
   const [signer, setSigner] = useState();
@@ -76,82 +77,90 @@ function ContractData() {
   if (token.tokenAddress === null) {
     return (
       <CardComponent>
-        <input className="w-25 m-2" type="text" required ref={tokenRef} />
-        <button
-          className="w-50 m-2 btn btn-secondary"
-          disabled={ifConnected}
-          onClick={() =>
-            dispatch(getContract(tokenRef.current.value, signer, account))
-          }
-        >
-          Address
-        </button>
+        <div className="mx-auto text-center mt-5">
+          <input className="w-75 m-2" type="text" required ref={tokenRef} />
+          <button
+            className="w-50 m-2 btn btn-secondary"
+            disabled={ifConnected}
+            onClick={() =>
+              dispatch(getContract(tokenRef.current.value, signer, account))
+            }
+          >
+            Address
+          </button>
+        </div>
       </CardComponent>
     );
   } else {
     return (
       <>
         <CardComponent>
-          <div className="header d-flex">
-            <div className="col-8  data-field">
-              <label> Lock Amount</label>
-              <div>
-                <input
-                  className="w-50 align-middle "
-                  type="text"
-                  required
-                  ref={amount}
-                  value={data.val}
-                  onChange={(e) => {
-                    setData({ ...data, val: e.target.value });
-                  }}
-                />
-                <button
-                  className="btn btn-light align-middle"
-                  onClick={handleMaxbtn}
-                >
-                  max
-                </button>
-              </div>
-            </div>
-            <div className="col-4 data-field">
-              <label>Balance:{data.bal}</label>
-              <div>
-                <h4>{data.symbol}</h4>
-              </div>
-            </div>
+          <div className="lockHeader text-center d-flex justify-content-center">
+            <i className="fa fa-lock lockIcon" aria-hidden="true" />
+            <h5>Add lock</h5>
           </div>
-          <div className="header d-flex">
-            <div className="col-8 data-field">
-              <label>Unlock Time</label>
-              <div>
-                <input className="w-25" type="text" required ref={time} />
+          <div className="p-1">
+            <div className="header d-flex">
+              <div className="col-8  data-field">
+                <label> Lock Amount</label>
+                <div>
+                  <input
+                    className="w-50 align-middle "
+                    type="text"
+                    required
+                    ref={amount}
+                    value={data.val}
+                    onChange={(e) => {
+                      setData({ ...data, val: e.target.value });
+                    }}
+                  />
+                  <button
+                    className="btn btn-light align-middle"
+                    onClick={handleMaxbtn}
+                  >
+                    max
+                  </button>
+                </div>
+              </div>
+              <div className="col-4 data-field">
+                <label>Balance:{data.bal}</label>
+                <div>
+                  <h4>{data.symbol}</h4>
+                </div>
               </div>
             </div>
-            <div className="col-4 data-field">
-              <Dropdown>
-                <Dropdown.Toggle variant="light" id="dropdown-basic">
-                  Days
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item>Days</Dropdown.Item>
-                  <Dropdown.Item>Months</Dropdown.Item>
-                  <Dropdown.Item>Timestamp</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+            <div className="header d-flex">
+              <div className="col-8 data-field">
+                <label>Unlock Time</label>
+                <div>
+                  <input className="w-25" type="text" required ref={time} />
+                </div>
+              </div>
+              <div className="col-4 data-field">
+                <Dropdown>
+                  <Dropdown.Toggle variant="light" id="dropdown-basic">
+                    Days
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item>Days</Dropdown.Item>
+                    <Dropdown.Item>Months</Dropdown.Item>
+                    <Dropdown.Item>Timestamp</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
             </div>
-          </div>
-          <div className="d-flex justify-content-evenly">
-            <button className="btn btn-outline-success" onClick={getApproval}>
-              Approve
-            </button>
-            <button
-              className="btn btn-outline-success"
-              disabled={button.lock}
-              onClick={getLockToken}
-            >
-              Lock
-            </button>
+            <div className="d-flex justify-content-evenly">
+              <button className="btn btn-outline-success" onClick={getApproval}>
+                Approve
+              </button>
+              <button
+                className="btn btn-outline-success"
+                disabled={button.lock}
+                onClick={getLockToken}
+              >
+                Lock
+              </button>
+            </div>
           </div>
         </CardComponent>
       </>
