@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import Lock from "../artifacts/contracts/Lock.sol/Lock.json";
 import Token from "../artifacts/contracts/Token.sol/Token.json";
-const lockAddress = "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d";
+const lockAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 async function getTokenContract(address, signer, account) {
   const lockContract = new ethers.Contract(lockAddress, Lock.abi, signer);
   const tokenContract = new ethers.Contract(address, Token.abi, signer);

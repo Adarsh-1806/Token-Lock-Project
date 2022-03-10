@@ -36,7 +36,7 @@ function TableContent() {
 
   return (
     <>
-      <table class="table">
+      <table className="table m-3 border">
         <thead>
           <tr>
             <th scope="col">Id</th>
@@ -71,7 +71,11 @@ function TableContent() {
           ))}
         </tbody>
       </table>
-      <button onClick={getdata}>My Transactions</button>
+      <div className="text-center m-2">
+        <button className="btn btn-secondary" onClick={getdata}>
+          My Transactions
+        </button>
+      </div>
     </>
   );
   // }

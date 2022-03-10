@@ -10,19 +10,32 @@ function Connect() {
   });
   if (data.isConnected) {
     return (
-      <div className="topHeader">
-        <span className="btns">{data.account}</span>
-        <button className="btns" onClick={() => dispatch(disconnect())}>
-          disconnect
-        </button>
-        <br />
-        <p>Balance:{data.balanceInEth}</p>
-      </div>
+      <>
+        <nav class="navbar navbar-light bg-light">
+          <a class="navbar-brand" href="#">
+            Time Based Token Lock
+          </a>
+
+          <div className="topHeader m-2">
+            <span className="btns">{data.account}</span>
+            <span>Balance:{data.balanceInEth}</span>
+            <button
+              className="btn btn-secondary m-1"
+              onClick={() => dispatch(disconnect())}
+            >
+              disconnect
+            </button>
+          </div>
+        </nav>
+      </>
     );
   } else {
     return (
-      <div className="topHeader">
-        <button className="btns" onClick={() => dispatch(connect())}>
+      <div className="topHeader m-2">
+        <button
+          className="btn btn-secondary"
+          onClick={() => dispatch(connect())}
+        >
           Connect
         </button>
       </div>

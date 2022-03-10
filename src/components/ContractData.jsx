@@ -7,9 +7,11 @@ function ContractData() {
   const connectdata = useSelector((state) => state.connectMetamask);
   const [signer, setSigner] = useState();
   const [account, setAccount] = useState();
+  const [ifConnected, setifConnected] = useState(true);
   connectdata.then((dt) => {
     setSigner(dt.signer);
     setAccount(dt.account);
+    setifConnected(!dt.isConnected);
   });
   const [data, setData] = useState({ bal: 0 });
   const token = useSelector((state) => state.getContract);
@@ -66,14 +68,15 @@ function ContractData() {
   if (token.tokenAddress === null) {
     return (
       <CardComponent>
-        <input className="w-75 " type="text" required ref={tokenRef} />
+        <input className="w-50 m-2" type="text" required ref={tokenRef} />
         <button
-          className="w-25"
+          className="w-25 m-2 btn btn-secondary"
+          disabled={ifConnected}
           onClick={() =>
             dispatch(getContract(tokenRef.current.value, signer, account))
           }
         >
-          Get
+          Address
         </button>
       </CardComponent>
     );
@@ -83,23 +86,54 @@ function ContractData() {
         <CardComponent>
           <div className="header d-flex">
             <div className="col-8  data-field">
-              <label> Token Amount</label>
+              <label> Lock Amount</label>
               <div>
-                <input className="w-25 " type="text" required ref={amount} />
-                <button>max</button>
+                <input
+                  className="w-50 align-middle "
+                  type="text"
+                  required
+                  ref={amount}
+                />
+                <button className="btn btn-light align-middle">max</button>
               </div>
             </div>
             <div className="col-4 data-field">
               <label>Balance:{data.bal}</label>
-              <span></span>
+              <span>ADT</span>
             </div>
           </div>
           <div className="header d-flex">
             <div className="col-8 data-field">
               <label>Unlock Time</label>
-              <input className="w-25" type="text" required ref={time} />
+              <div>
+                <input className="w-25" type="text" required ref={time} />
+              </div>
             </div>
-            <div className="col-4 data-field"></div>
+            <div className="col-4 data-field">
+              <div class="dropdown">
+                <a
+                  class="btn btn-light dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Day
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">
+                    Action
+                  </a>
+                  <a class="dropdown-item" href="#">
+                    Another action
+                  </a>
+                  <a class="dropdown-item" href="#">
+                    Something else here
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="d-flex justify-content-evenly">
             <button onClick={getApproval}>Approve</button>
