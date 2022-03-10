@@ -11,16 +11,20 @@ function Connect() {
   if (data.isConnected) {
     return (
       <>
-        <nav class="navbar navbar-light bg-light">
-          <a class="navbar-brand" href="#">
-            Time Based Token Lock
+        <nav className="navbar navbar-light bg-light mb-1">
+          <img src="../../public/team.png" alt="team" />
+          <a className="navbar-brand" href="#">
+            Lock Token
           </a>
-
+          {/* <button style={{ maxWidth: 250 }}> */}
+          <span className="bg-white">{data.account}</span>
+          {/* </button> */}
+          {/* <button style={{ maxWidth: 250 }}> */}
+          <span className="bg-white">{data.balanceInEth}</span>
+          {/* </button> */}
           <div className="topHeader m-2">
-            <span className="btns">{data.account}</span>
-            <span>Balance:{data.balanceInEth}</span>
             <button
-              className="btn btn-secondary m-1"
+              className="btn btn-danger m-1"
               onClick={() => dispatch(disconnect())}
             >
               disconnect

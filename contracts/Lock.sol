@@ -12,7 +12,7 @@ contract Lock {
         uint256 amount;
         bool withdrawed;
     }
-    uint256 id = 0;
+    uint256 id = 1;
     uint256[] allIds;
     mapping(uint256 => Details) lockedTokens;
     mapping(address => uint256[]) depositor;
@@ -108,6 +108,8 @@ contract Lock {
         Token(_tokenAddress).transfer(msg.sender, _amount);
         lockedTokens[_id].amount = 0;
         lockedTokens[_id].withdrawed = true;
+
+        emit TokenTransfered(address(this), msg.sender, _amount);
     }
 
     /**

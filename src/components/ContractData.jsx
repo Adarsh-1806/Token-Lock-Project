@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CardComponent from "./CardComponent";
 import { getContract } from "../actions/index";
-
+import { Dropdown } from "react-bootstrap";
 function ContractData() {
   const connectdata = useSelector((state) => state.connectMetamask);
   const [signer, setSigner] = useState();
@@ -13,18 +13,19 @@ function ContractData() {
     setAccount(dt.account);
     setifConnected(!dt.isConnected);
   });
-  const [data, setData] = useState({ bal: 0 });
+  const [data, setData] = useState({ bal: 0, val: 0 });
   const token = useSelector((state) => state.getContract);
   if (token.tokenAddress !== null && data.bal === 0) {
     token.then((dt) => {
       setData({
         bal: dt.tokenBal,
+        symbol: dt.symbol,
         tokenContract: dt.tokenContract,
         lockContract: dt.lockContract,
       });
     });
   }
-  const [button, setButton] = useState(true);
+  const [button, setButton] = useState({ lock: true });
   const tokenRef = useRef();
   const amount = useRef();
   const time = useRef();
@@ -32,9 +33,15 @@ function ContractData() {
   async function getApproval() {
     const tokenAmount = amount.current.value;
     const unlockTime = time.current.value;
+    console.log(tokenAmount);
     await data.tokenContract.approve(data.lockContract.address, tokenAmount);
     data.tokenContract.on("Approval", (owner, spender, value) => {
-      setButton(false);
+      setData({
+        ...data,
+        tokenAmount,
+        unlockTime,
+      });
+      setButton({ lock: false });
       console.log(
         "Approval from:",
         owner,
@@ -43,11 +50,6 @@ function ContractData() {
         " of Amount:",
         value
       );
-    });
-    setData({
-      ...data,
-      tokenAmount,
-      unlockTime,
     });
   }
   async function getLockToken() {
@@ -62,15 +64,21 @@ function ContractData() {
         16
       );
       setData({ ...data, bal: newBal });
-      setButton(true);
+      setButton({ lock: true });
     });
+  }
+  function handleMaxbtn() {
+    console.log("Clicked....");
+    // amount.current = data.bal;
+    setData({ ...data, val: data.bal });
+    console.log(data.val);
   }
   if (token.tokenAddress === null) {
     return (
       <CardComponent>
-        <input className="w-50 m-2" type="text" required ref={tokenRef} />
+        <input className="w-25 m-2" type="text" required ref={tokenRef} />
         <button
-          className="w-25 m-2 btn btn-secondary"
+          className="w-50 m-2 btn btn-secondary"
           disabled={ifConnected}
           onClick={() =>
             dispatch(getContract(tokenRef.current.value, signer, account))
@@ -93,13 +101,24 @@ function ContractData() {
                   type="text"
                   required
                   ref={amount}
+                  value={data.val}
+                  onChange={(e) => {
+                    setData({ ...data, val: e.target.value });
+                  }}
                 />
-                <button className="btn btn-light align-middle">max</button>
+                <button
+                  className="btn btn-light align-middle"
+                  onClick={handleMaxbtn}
+                >
+                  max
+                </button>
               </div>
             </div>
             <div className="col-4 data-field">
               <label>Balance:{data.bal}</label>
-              <span>ADT</span>
+              <div>
+                <h4>{data.symbol}</h4>
+              </div>
             </div>
           </div>
           <div className="header d-flex">
@@ -110,34 +129,27 @@ function ContractData() {
               </div>
             </div>
             <div className="col-4 data-field">
-              <div class="dropdown">
-                <a
-                  class="btn btn-light dropdown-toggle"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Day
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">
-                    Action
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    Another action
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    Something else here
-                  </a>
-                </div>
-              </div>
+              <Dropdown>
+                <Dropdown.Toggle variant="light" id="dropdown-basic">
+                  Days
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item>Days</Dropdown.Item>
+                  <Dropdown.Item>Months</Dropdown.Item>
+                  <Dropdown.Item>Timestamp</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
           </div>
           <div className="d-flex justify-content-evenly">
-            <button onClick={getApproval}>Approve</button>
-            <button disabled={button} onClick={getLockToken}>
+            <button className="btn btn-outline-success" onClick={getApproval}>
+              Approve
+            </button>
+            <button
+              className="btn btn-outline-success"
+              disabled={button.lock}
+              onClick={getLockToken}
+            >
               Lock
             </button>
           </div>

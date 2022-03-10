@@ -1,13 +1,18 @@
-import { useState, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import store from "../store";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+
 function TableContent() {
   const stateData = useSelector((state) => state.getContract);
+  const connectdata = useSelector((state) => state.connectMetamask);
   const [contract, setContract] = useState(null);
-  const [connect, setconnect] = useState();
   const [transaction, setTransaction] = useState([]);
+  const [ifConnected, setifConnected] = useState(true);
+  connectdata.then((dt) => {
+    setifConnected(!dt.isConnected);
+  });
   if (stateData.lockContract !== null && contract === null) {
     stateData.then((dt) => {
+      console.log(stateData);
       setContract(dt.lockContract);
     });
   }
@@ -30,8 +35,11 @@ function TableContent() {
     }
     setTransaction(tnx);
   }
-  async function withdrawToken() {
-    console.log("Button Clicked");
+  async function withdrawToken(_id) {
+    await contract.withDrawToken(_id);
+    contract.on("TokenTransfered", (sender, reciever, value) => {
+      console.log("Transfer Confirmed");
+    });
   }
 
   return (
@@ -60,7 +68,7 @@ function TableContent() {
               <td>
                 <button
                   className="btn btn-success"
-                  onClick={withdrawToken}
+                  onClick={() => withdrawToken(item.id)}
                   disabled={item.withdrawed}
                 >
                   withdraw
@@ -72,12 +80,15 @@ function TableContent() {
         </tbody>
       </table>
       <div className="text-center m-2">
-        <button className="btn btn-secondary" onClick={getdata}>
+        <button
+          className="btn btn-secondary"
+          disabled={ifConnected}
+          onClick={getdata}
+        >
           My Transactions
         </button>
       </div>
     </>
   );
-  // }
 }
 export default TableContent;
