@@ -14,11 +14,12 @@ function ContractData() {
     setAccount(dt.account);
     setifConnected(!dt.isConnected);
   });
-  const [data, setData] = useState({ bal: 0, val: 0 });
+  const [data, setData] = useState({ bal: 0, val: 0, lockContract: null });
   const token = useSelector((state) => state.getContract);
   if (token.tokenAddress !== null && data.bal === 0) {
     token.then((dt) => {
       setData({
+        ...data,
         bal: dt.tokenBal,
         symbol: dt.symbol,
         tokenContract: dt.tokenContract,
@@ -34,7 +35,6 @@ function ContractData() {
   async function getApproval() {
     const tokenAmount = amount.current.value;
     const unlockTime = time.current.value;
-    console.log(tokenAmount);
     await data.tokenContract.approve(data.lockContract.address, tokenAmount);
     data.tokenContract.on("Approval", (owner, spender, value) => {
       setData({
@@ -79,6 +79,9 @@ function ContractData() {
       <CardComponent>
         <div className="mx-auto text-center mt-5">
           <input className="w-75 m-2" type="text" required ref={tokenRef} />
+          <small style={{ color: "gray" }}>
+            e.g.0x5FbDB2315678afecb367f032d93F642f64180aa3
+          </small>
           <button
             className="w-50 m-2 btn btn-secondary"
             disabled={ifConnected}
@@ -95,10 +98,6 @@ function ContractData() {
     return (
       <>
         <CardComponent>
-          <div className="lockHeader text-center d-flex justify-content-center">
-            <i className="fa fa-lock lockIcon" aria-hidden="true" />
-            <h5>Add lock</h5>
-          </div>
           <div className="p-1">
             <div className="header d-flex">
               <div className="col-8  data-field">

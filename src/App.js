@@ -8,11 +8,11 @@ import TableContent from "./components/TableContent";
 
 function App() {
   return (
-    <div className="main-body">
+    <>
       <Connect />
       <ContractData />
       <TableContent />
-    </div>
+    </>
   );
 }
 

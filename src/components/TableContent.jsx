@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
+import Content from "./Content";
+import SimpleDateTime from "react-simple-timestamp-to-date";
+import "./TableContent.css";
 function TableContent() {
   const stateData = useSelector((state) => state.getContract);
   const connectdata = useSelector((state) => state.connectMetamask);
@@ -12,11 +14,15 @@ function TableContent() {
   });
   if (stateData.lockContract !== null && contract === null) {
     stateData.then((dt) => {
-      console.log(stateData);
       setContract(dt.lockContract);
     });
   }
+  /**
+   *@dev function to get Token Lock data
+   * @return {*} set Data in component State
+   */
   async function getdata() {
+    if (contract === null) return;
     const arr = await contract.myTransactions();
     const tnx = [];
     for (let i = 0; i < arr.length; i++) {
@@ -35,60 +41,96 @@ function TableContent() {
     }
     setTransaction(tnx);
   }
+  /**
+   * @dev function to withdraw token
+   * @param _id {uint} id of Lock transaction
+   */
   async function withdrawToken(_id) {
     await contract.withDrawToken(_id);
     contract.on("TokenTransfered", (sender, reciever, value) => {
       console.log("Transfer Confirmed");
     });
   }
-
-  return (
-    <>
-      <table className="table m-3 border">
-        <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Token</th>
-            <th scope="col">Amount</th>
-            <th scope="col">LockedTime</th>
-            <th scope="col">UnlockTime</th>
-            <th scope="col">Owner</th>
-            <th scope="col">Withdrawed</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transaction.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>ADT</td>
-              <td>{item.amount}</td>
-              <td>{item.lockedTime}</td>
-              <td>{item.unlockTime}</td>
-              <td>{item.owner}</td>
-              <td>
-                <button
-                  className="btn btn-success"
-                  onClick={() => withdrawToken(item.id)}
-                  disabled={item.withdrawed}
-                >
-                  withdraw
-                </button>
-              </td>
-              <td />
+  if (transaction.length === 0) {
+    return (
+      <Content>
+        <h3 className="d-flex justify-content-center">No Locks </h3>
+        <div className="text-center m-2">
+          <button
+            className="btn btn-secondary"
+            disabled={ifConnected}
+            onClick={getdata}
+          >
+            <i class="fa fa-refresh" aria-hidden="true"></i>
+          </button>
+        </div>
+      </Content>
+    );
+  } else {
+    return (
+      <Content>
+        <table className="table m-3 border">
+          <thead>
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Token</th>
+              <th scope="col">Amount</th>
+              <th scope="col">LockedTime</th>
+              <th scope="col">UnlockTime</th>
+              <th scope="col">Owner</th>
+              <th scope="col">Withdrawed</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="text-center m-2">
-        <button
-          className="btn btn-secondary"
-          disabled={ifConnected}
-          onClick={getdata}
-        >
-          My Transactions
-        </button>
-      </div>
-    </>
-  );
+          </thead>
+          <tbody>
+            {transaction.map((item) => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>ADT</td>
+                <td>{item.amount}</td>
+                <td>
+                  <SimpleDateTime
+                    dateFormat="DMY"
+                    dateSeparator="/"
+                    timeSeparator=":"
+                  >
+                    {item.lockedTime}
+                  </SimpleDateTime>
+                </td>
+                <td>
+                  <SimpleDateTime
+                    dateFormat="DMY"
+                    dateSeparator="/"
+                    timeSeparator=":"
+                  >
+                    {item.unlockTime}
+                  </SimpleDateTime>
+                </td>
+                <td className="ownerCell">{item.owner}</td>
+                <td>
+                  <button
+                    className="btn btn-success"
+                    onClick={() => withdrawToken(item.id)}
+                    disabled={item.withdrawed}
+                  >
+                    withdraw
+                  </button>
+                </td>
+                <td />
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="text-center m-2">
+          <button
+            className="btn btn-secondary"
+            disabled={ifConnected}
+            onClick={getdata}
+          >
+            <i class="fa fa-refresh" aria-hidden="true"></i>
+          </button>
+        </div>
+      </Content>
+    );
+  }
 }
 export default TableContent;

@@ -1,0 +1,15 @@
+.content-section {
+  background-color: rgb(224, 222, 226);
+  padding: 1% 0%;
+}
+.content-Wrapper {
+  margin: 1% 4%;
+  background-color: white;
+}
+.content-header {
+  padding: 10px;
+  border-bottom: rgb(224, 222, 226) solid 5px;
+}
+.tableData {
+  overflow-y: auto;
+}

@@ -16,8 +16,3 @@ export const getContract = (address, signer, account) => {
     account: account,
   };
 };
-export const getTransactiondata = () => {
-  return {
-    type: "GETTRANSACTIONDATA",
-  };
-};

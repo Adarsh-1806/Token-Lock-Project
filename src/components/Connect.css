@@ -7,3 +7,8 @@
 .topHeader {
   text-align: right;
 }
+.dataspan {
+  max-width: 50px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

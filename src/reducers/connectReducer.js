@@ -1,5 +1,9 @@
 import { ethers } from "ethers";
-
+/**
+ * @dev function for connect account with metamask & set global state data
+ *
+ * @return {*}
+ */
 async function connectWallet() {
   try {
     const { ethereum } = window;

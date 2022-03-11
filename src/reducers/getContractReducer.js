@@ -6,7 +6,6 @@ async function getTokenContract(address, signer, account) {
   const lockAddress = process.env.REACT_APP_CONTRACTADDRESS;
 
   const lockContract = new ethers.Contract(lockAddress, Lock.abi, signer);
-  console.log();
   const tokenContract = new ethers.Contract(address, Token.abi, signer);
   const symbol = await tokenContract.symbol();
   const tokenBal = parseInt((await tokenContract.balanceOf(account))._hex, 16);

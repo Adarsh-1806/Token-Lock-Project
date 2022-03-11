@@ -1,7 +1,4 @@
 .mainContainer {
-  min-height: 75vh;
+  min-height: 70vh;
   padding: 50px;
-}
-.subContainer {
-  width: 35% !important;
 }
