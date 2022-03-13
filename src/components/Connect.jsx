@@ -9,66 +9,72 @@ function Connect() {
   state.then((dt) => {
     setData(dt);
   });
-  window.ethereum.enable(); // get permission to access accounts
+  window.ethereum.enable();
 
-  // detect Metamask account change
   window.ethereum.on("accountsChanged", function (accounts) {
     window.location.reload();
   });
 
-  // detect Network account change
-  window.ethereum.on("networkChanged", function (networkId) {
+  window.ethereum.on("chainChanged", function (networkId) {
     window.location.reload();
   });
   if (data.isConnected) {
     return (
       <>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <a className="navbar-brand" href="#">
-            Token Pool
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div
-            className="collapse navbar-collapse d-flex justify-content-between"
-            id="navbarNav"
-          >
-            <div>
-              <ul className="navbar-nav">
-                <li className="nav-item active">
-                  <a className="nav-link">
-                    Explore <span className="sr-only">(current)</span>
+          <div className="container-fluid">
+            <a className="navbar-brand" href="#">
+              Navbar
+            </a>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse " id="navbarNav">
+              <ul className="navbar-nav me-auto">
+                <li className="nav-item">
+                  <a className="nav-link active" aria-current="page" href="#">
+                    Home
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link">About</a>
+                  <a className="nav-link" href="#">
+                    Features
+                  </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link">Lockups</a>
+                  <a className="nav-link" href="#">
+                    Pricing
+                  </a>
                 </li>
               </ul>
-            </div>
-            <div className="d-flex justify-content-center align-text-center">
-              <p className="bg-white dataspan pt-3">{data.account}</p>
-              <p className="bg-white dataspan pt-3">{data.balanceInEth}</p>
-              <button
-                className="btn btn-danger m-1"
-                onClick={() => {
-                  dispatch(disconnect());
-                  window.location.reload();
-                }}
-              >
-                disconnect
-              </button>
+              {/*right part */}
+              <div className="d-flex  ">
+                <div className="d-flex">
+                  <p className=" dataspan pt-3 mb-0 px-2 accdiv">
+                    {data.account}
+                  </p>
+                  <p className="dataspan pt-3 mb-0 px-2 accBal">
+                    {data.balanceInEth}
+                  </p>
+                </div>
+                <button
+                  className="btn btn-danger m-1"
+                  onClick={() => {
+                    dispatch(disconnect());
+                    window.location.reload();
+                  }}
+                >
+                  disconnect
+                </button>
+              </div>
             </div>
           </div>
         </nav>

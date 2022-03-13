@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Alert } from "react-alert";
 import { useSelector, useDispatch } from "react-redux";
 import CardComponent from "./CardComponent";
 import { getContract } from "../actions/index";
@@ -27,7 +28,7 @@ function ContractData() {
       });
     });
   }
-  const [button, setButton] = useState({ lock: true });
+  const [button, setButton] = useState({ lock: true, approval: false });
   const tokenRef = useRef();
   const amount = useRef();
   const time = useRef();
@@ -35,23 +36,27 @@ function ContractData() {
   async function getApproval() {
     const tokenAmount = amount.current.value;
     const unlockTime = time.current.value;
-    await data.tokenContract.approve(data.lockContract.address, tokenAmount);
-    data.tokenContract.on("Approval", (owner, spender, value) => {
-      setData({
-        ...data,
-        tokenAmount,
-        unlockTime,
+    if (tokenAmount == 0) {
+      alert("amount should not be 0");
+      return;
+    }
+    setButton({ ...button, approve: true });
+    await data.tokenContract
+      .approve(data.lockContract.address, tokenAmount)
+      .then((result) => {
+        data.tokenContract.on("Approval", (owner, spender, value) => {
+          setData({
+            ...data,
+            tokenAmount,
+            unlockTime,
+          });
+          setButton({ ...button, lock: false });
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+        setButton({ ...button, approve: false });
       });
-      setButton({ lock: false });
-      console.log(
-        "Approval from:",
-        owner,
-        " to:",
-        spender,
-        " of Amount:",
-        value
-      );
-    });
   }
   async function getLockToken() {
     await data.lockContract.lockToken(
@@ -65,14 +70,11 @@ function ContractData() {
         16
       );
       setData({ ...data, bal: newBal });
-      setButton({ lock: true });
+      setButton({ ...button, lock: true });
     });
   }
   function handleMaxbtn() {
-    console.log("Clicked....");
-    // amount.current = data.bal;
     setData({ ...data, val: data.bal });
-    console.log(data.val);
   }
   if (token.tokenAddress === null) {
     return (
@@ -98,9 +100,9 @@ function ContractData() {
     return (
       <>
         <CardComponent>
-          <div className="p-1">
-            <div className="header d-flex">
-              <div className="col-8  data-field">
+          <div className="p-4">
+            <div className="header d-flex  align-items-center data-field">
+              <div className="col-8 ">
                 <label> Lock Amount</label>
                 <div>
                   <input
@@ -121,24 +123,26 @@ function ContractData() {
                   </button>
                 </div>
               </div>
-              <div className="col-4 data-field">
-                <label>Balance:{data.bal}</label>
-                <div>
-                  <h4>{data.symbol}</h4>
+              <div className="col-4">
+                <div className="text-center">
+                  <label>Balance:{data.bal}</label>
+                </div>
+                <div className="text-center">
+                  <h4 className="mb-0">{data.symbol}</h4>
                 </div>
               </div>
             </div>
-            <div className="header d-flex">
-              <div className="col-8 data-field">
+            <div className="header d-flex  align-items-center data-field">
+              <div className="col-8 ">
                 <label>Unlock Time</label>
                 <div>
                   <input className="w-25" type="text" required ref={time} />
                 </div>
               </div>
-              <div className="col-4 data-field">
+              <div className="col-4">
                 <Dropdown>
                   <Dropdown.Toggle variant="light" id="dropdown-basic">
-                    Days
+                    Timestamp
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item>Days</Dropdown.Item>
@@ -148,12 +152,16 @@ function ContractData() {
                 </Dropdown>
               </div>
             </div>
-            <div className="d-flex justify-content-evenly">
-              <button className="btn btn-outline-success" onClick={getApproval}>
+            <div className="d-flex align-items-center data-field justify-content-evenly">
+              <button
+                className="btn btn-success"
+                disabled={button.approve}
+                onClick={getApproval}
+              >
                 Approve
               </button>
               <button
-                className="btn btn-outline-success"
+                className="btn btn-success"
                 disabled={button.lock}
                 onClick={getLockToken}
               >

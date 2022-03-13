@@ -20,6 +20,7 @@ contract Lock {
     mapping(address => mapping(address => uint256)) myBalance;
 
     event TokenTransfered(address _from, address _to, uint256 _value);
+    event withdrawComplete(address _from, address _to, uint256 _value);
 
     /**
      * @dev function Lock token in contract
@@ -109,7 +110,7 @@ contract Lock {
         lockedTokens[_id].amount = 0;
         lockedTokens[_id].withdrawed = true;
 
-        emit TokenTransfered(address(this), msg.sender, _amount);
+        emit withdrawComplete(address(this), msg.sender, _amount);
     }
 
     /**

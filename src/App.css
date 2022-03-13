@@ -1,8 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;400&display=swap");
 .App {
   text-align: center;
 }
 .body {
   background-color: blue;
+  font-family: "Roboto Slab", serif;
 }
 .App-logo {
   height: 40vmin;

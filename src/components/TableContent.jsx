@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import Content from "./Content";
 import SimpleDateTime from "react-simple-timestamp-to-date";
-import "./TableContent.css";
+/**
+ *
+ *
+ * @return {*}
+ */
 function TableContent() {
   const stateData = useSelector((state) => state.getContract);
   const connectdata = useSelector((state) => state.connectMetamask);
@@ -15,6 +19,28 @@ function TableContent() {
   if (stateData.lockContract !== null && contract === null) {
     stateData.then((dt) => {
       setContract(dt.lockContract);
+    });
+  }
+  if (contract !== null) {
+    contract.on("TokenTransfered", async (sender, reciever, value) => {
+      /* const arr = await contract.myTransactions();
+      const tnx = transaction;
+      if (arr.length == tnx.length + 1) {
+        const e = parseInt(arr[arr.length - 1]._hex, 16);
+        const trns = await contract.getDetailsOf(e);
+        const obj = {
+          id: parseInt(trns.id._hex, 16),
+          owner: trns.owner,
+          tokenAddress: trns.tokenAddress,
+          withdrawed: trns.withdrawed,
+          amount: parseInt(trns.amount._hex, 16),
+          lockedTime: parseInt(trns.lockedTime._hex, 16),
+          unlockTime: parseInt(trns.unlockTime._hex, 16),
+        };
+        tnx.push(obj);
+        setTransaction(tnx);
+      }*/
+      await getdata();
     });
   }
   /**
@@ -61,7 +87,7 @@ function TableContent() {
             disabled={ifConnected}
             onClick={getdata}
           >
-            <i class="fa fa-refresh" aria-hidden="true"></i>
+            <i className="fa fa-refresh" aria-hidden="true"></i>
           </button>
         </div>
       </Content>
@@ -126,7 +152,7 @@ function TableContent() {
             disabled={ifConnected}
             onClick={getdata}
           >
-            <i class="fa fa-refresh" aria-hidden="true"></i>
+            <i className="fa fa-refresh" aria-hidden="true"></i>
           </button>
         </div>
       </Content>

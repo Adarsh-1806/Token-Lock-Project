@@ -30,7 +30,7 @@ module.exports = {
     rinkeby: {
       url: `https://rinkeby.infura.io/v3/${ALCHEMY_API_KEY}`,
       accounts: [`${RINKEBY_PRIVATE_KEY}`],
-      gas: "auto",
+      gas: 7000000,
     },
   },
 };

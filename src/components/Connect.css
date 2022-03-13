@@ -8,7 +8,19 @@
   text-align: right;
 }
 .dataspan {
-  max-width: 50px;
+  max-width: 100px;
   text-overflow: ellipsis;
   overflow: hidden;
+  line-height: 10px;
+}
+.accdiv {
+  background-color: gray;
+
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.accBal {
+  background-color: white;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
 }

@@ -2,3 +2,7 @@
   font-size: 20px;
   margin-right: 5px;
 }
+.data-field {
+  min-height: 15vh;
+  /* min-width: 15vw; */
+}
