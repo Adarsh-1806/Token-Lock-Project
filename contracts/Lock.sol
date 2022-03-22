@@ -16,7 +16,7 @@ contract Lock {
     uint256[] allIds;
     mapping(uint256 => Details) lockedTokens;
     mapping(address => uint256[]) depositor;
-    mapping(address => uint256[]) tokenDetail;
+     mapping(address => uint256[]) tokenDetail;
     mapping(address => mapping(address => uint256)) myBalance;
 
     event TokenTransfered(address _from, address _to, uint256 _value);
