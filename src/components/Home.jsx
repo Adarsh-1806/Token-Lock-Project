@@ -1,5 +1,5 @@
 import NavBar from "./NavBar";
-import TableContent from "./TableContent";
+import AllTransactions from "./AllTransactions";
 import lock from "./images/lock.svg";
 import sell from "./images/sell.svg";
 import laptop from "./images/laptop.svg";
@@ -7,11 +7,11 @@ import Footer from "./Footer";
 function Home() {
   return (
     <>
-      <section className="container-fluid bg-primary">
+      <section className="container-fluid bg-primary topheader">
         <div>
           <NavBar />
         </div>
-        <div>
+        <div className="text-white">
           <div className="title-block d-flex justify-content-center">
             <h1>Smart Lock</h1>
           </div>
@@ -19,8 +19,8 @@ function Home() {
             Liquidity Locking & Team Vesting for Token Founders and Community
           </p>
         </div>
-        <div>
-          <section className="section-item d-flex justify-content-center">
+        <div className="section-item text-white">
+          <section className=" d-flex justify-content-center ">
             <div className="image-item ">Image</div>
             <div className="content-item">
               <h1>$ 6,158,871,211.97</h1>
@@ -30,7 +30,7 @@ function Home() {
         </div>
       </section>
       <section className="explore-container">
-        <TableContent />
+        <AllTransactions />
       </section>
       <section className="moreinfo-container">
         <div className="container py-5">
