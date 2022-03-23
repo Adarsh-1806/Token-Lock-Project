@@ -4,13 +4,13 @@ import lock from "./images/lock.svg";
 import sell from "./images/sell.svg";
 import laptop from "./images/laptop.svg";
 import Footer from "./Footer";
+import "./Home.css";
 function Home() {
   return (
     <>
-      <section className="container-fluid bg-primary">
-        <div>
-          <NavBar />
-        </div>
+      <section className="container-fluid bg-primary text-white">
+        <NavBar />
+
         <div>
           <div className="title-block d-flex justify-content-center">
             <h1>Smart Lock</h1>
@@ -19,58 +19,64 @@ function Home() {
             Liquidity Locking & Team Vesting for Token Founders and Community
           </p>
         </div>
-        <div>
-          <section className="section-item d-flex justify-content-center">
-            <div className="image-item ">Image</div>
-            <div className="content-item">
+        <div className="d-flex justify-content-center pb-5">
+          <div className="d-flex p-3 section-item">
+            <div className="image-item  my-auto">Image</div>
+            <div className="content-item section-item ">
               <h1>$ 6,158,871,211.97</h1>
-              <p>Total Locked Token Value</p>
+              <p className="text-white">Total Locked Token Value</p>
             </div>
-          </section>
+          </div>
         </div>
       </section>
       <section className="explore-container">
         <TableContent />
       </section>
-      <section className="moreinfo-container">
-        <div className="container py-5">
-          <div className="d-flex justify-content-center">
-            <h4>Easy Liquidity Locking & Token Vesting</h4>
+      <section className="moreinfo-container d-flex justify-content-center">
+        <div className="item m-3">
+          <div className="item-image d-flex justify-content-center">
+            <img src={lock} className="card-img-top itemImage" alt="lock" />
           </div>
-          <div className="d-flex">
-            <div class="card info-card m-2">
-              <img src={lock} class="card-img-top" alt="lock" />
-              {/* <h5 class="card-title">Lock Liquidity</h5> */}
-              <div class="card-body">
-                <p class="card-text">
-                  Input your liquidity tokens into a time-released vault that
-                  returns the tokens at a specified date.
-                </p>
-              </div>
-            </div>
-            <div class="card info-card m-2">
-              <img src={sell} class="card-img" alt="..." />
-              <h5 class="card-title">Team Token Vesting</h5>
-              <div class="card-body">
-                <p class="card-text">
-                  Create a vesting schedule for team members with specified
-                  dates and token amounts.
-                </p>
-              </div>
-            </div>
-            <div class="card info-card m-2">
-              <img src={laptop} class="card-img-top" alt="..." />
-              {/* <h5 class="card-title">Public Facing Profile</h5> */}
-              <div class="card-body">
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>
-              </div>
-            </div>
+          <div className="card-body ">
+            <h4 className="item-title d-flex justify-content-center">
+              Lock Liquidity
+            </h4>
+            <center className="item-content text-secondary d-flex text-align-center">
+              Input your liquidity tokens into a time-released vault that
+              returns the tokens at a specified date.
+            </center>
+          </div>
+        </div>
+        <div className="item m-3">
+          <div className="item-image d-flex justify-content-center">
+            <img src={sell} className="card-img-top itemImage" alt="lock" />
+          </div>
+          <div className="card-body ">
+            <h4 className="item-title d-flex justify-content-center">
+              Team Token Vesting
+            </h4>
+            <center className="item-content text-secondary d-flex justify-content-center">
+              Create a vesting schedule for team members with specified dates
+              and token amounts.
+            </center>
+          </div>
+        </div>
+        <div className="item m-3">
+          <div className="item-image d-flex justify-content-center">
+            <img src={laptop} className="card-img-top itemImage" alt="lock" />
+          </div>
+          <div className="card-body ">
+            <h4 className="item-title d-flex justify-content-center">
+              Public Facing Profile
+            </h4>
+            <center className="item-content text-secondary d-flex justify-content-center">
+              Proudly display your locked tokens and vesting schedules to the
+              world as proof.
+            </center>
           </div>
         </div>
       </section>
+
       <Footer />
     </>
   );
