@@ -1,73 +1,51 @@
 import React from "react";
+import logofooter from "./images/logofooter.png";
+import "./Footer.css";
 export default function Footer() {
-  const footerdata = {
-    text: "Join our mailing list to stay in the loop with our newest feature releases, NFT drops, and tips and tricks for navigating OpenSea.",
-    searchPlaceholder: "Your email address",
-    aboutBrand:
-      "The world's first and largest digital marketplace for crypto collectibles and non-fungible tokens (NFTs). Buy, sell, and discover exclusive digital .",
-    twitterUrl: "",
-    youtubeUrl: "",
-    discordUrl: "",
-    instagramUrl: "",
-    emailUrl: "",
-    copyRight: "© 2018 - 2022 Ozone Networks, Inc",
-  };
   return (
-    <div className="container-fluid footer bg-primary">
-      <hr className="mb-5" />
-      <div className="row">
-        <div className="col-lg-4 col-md-12 company">
-          <img src={footerdata.logo} alt="brand-logo" className="brand-logo" />
-          <a href="/" className="title cursor-pointer">
-            <h3>OpenSea</h3>
-          </a>
-          <p className="about">{footerdata.aboutBrand}</p>
-        </div>
-        <div className="col-lg-2 col-md-3 col">
-          <h5 className="title">Markerplace</h5>
+    <div className="container-fluid">
+      <div className="container footer">
+        <hr className="mb-5" />
+        <div className="row">
+          <div className="col-lg-4 col-md-12 me-auto">
+            <img src={logofooter} alt="brand-logo" className="brand-logo" />
+          </div>
+          <div className="col-lg-2 col-md-3 col ">
+            <h5>Platform</h5>
 
-          <li className="cursor-pointer my-2">Art</li>
-          <li className="cursor-pointer my-2">Photography</li>
-          <li className="cursor-pointer my-2">Sports</li>
-          <li className="cursor-pointer my-2">Virtual World</li>
-          <li className="cursor-pointer my-2">Music</li>
-          <li className="cursor-pointer my-2">Utility</li>
-        </div>
-        <div className="col-lg-2 col-md-3 col">
-          <h5 className="title">My Account</h5>
+            <li className="my-2 ">Explore</li>
+            <li className="my-2">All Coin</li>
+            <li className="my-2">About</li>
+            <li className="my-2">TrustSwap</li>
+          </div>
+          <div className="col-lg-2 col-md-3 col">
+            <h5>Lockups</h5>
 
-          <li className="cursor-pointer my-2">Profile</li>
-          <li className="cursor-pointer my-2">Favorites</li>
-          <li className="cursor-pointer my-2">Watchlist</li>
-          <li className="cursor-pointer my-2">My Collections</li>
-          <li className="cursor-pointer my-2">Settings</li>
-        </div>
-        <div className="col-lg-2 col-md-3 col">
-          <h5 className="title">Resources</h5>
+            <li className="my-2">Create Lock</li>
+            <li className="my-2">My Lockups</li>
+            <li className="my-2">Help Locking</li>
+            <li className="my-2">FAQ</li>
+          </div>
+          <div className="col-lg-2 col-md-3 col footer-list">
+            <h5>Company</h5>
 
-          <li className="cursor-pointer my-2">Help Center</li>
-          <li className="cursor-pointer my-2">Platform Status</li>
-          <li className="cursor-pointer my-2">Partners</li>
-          <li className="cursor-pointer my-2">Gas-Free Marketplace</li>
-          <li className="cursor-pointer my-2">Taxes</li>
-          <li className="cursor-pointer my-2">Blog</li>
-          <li className="cursor-pointer my-2">Docs</li>
-          <li className="cursor-pointer my-2">Newsletter</li>
+            <li className="my-2">Privacy Policy</li>
+            <li className="my-2">Terms & Condition</li>
+            <li className="my-2">GitBook</li>
+            <li className="my-2">Help Center</li>
+          </div>
+          <div className="col-lg-2 col-md-3 col">
+            <h5>Connect</h5>
+            <li className="my-2">Facebook</li>
+            <li className="my-2">Discord</li>
+            <li className="my-2">Github</li>
+            <li className="my-2">Twitter</li>
+          </div>
         </div>
-        <div className="col-lg-2 col-md-3 col">
-          <h5 className="title">Company</h5>
-
-          <li className="cursor-pointer my-2">About</li>
-          <li className="cursor-pointer my-2">Careers</li>
-          <li className="cursor-pointer my-2">Ventures</li>
-          <li className="cursor-pointer my-2">Grants</li>
+        <div className="col-lg-3 col-md-3 col">
+          <p>© 2022 All Rights Resevied</p>
         </div>
       </div>
-      <hr className="mt-5" />
-
-      <a href="/" className="copy-right">
-        {footerdata.copyRight}
-      </a>
     </div>
   );
 }

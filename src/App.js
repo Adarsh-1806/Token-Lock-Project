@@ -5,6 +5,7 @@ import "./components/Connect.css";
 import Home from "./components/Home";
 import Lockup from "./components/Lockup";
 import About from "./components/About";
+import ClaimToken from "./components/ClaimToken";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/lockup" element={<Lockup />} />
         <Route exact path="/about" element={<About />} />
+        <Route exact path="/claimtoken" element={<ClaimToken />} />
       </Routes>
     </Router>
   );

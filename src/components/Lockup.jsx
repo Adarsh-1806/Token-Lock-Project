@@ -1,9 +1,13 @@
-import Connect from "./Connect";
+import NavBar from "./NavBar";
+import ContractData from "./ContractData";
+import TableContent from "./TableContent";
 
 function Lockup() {
   return (
     <>
-      <Connect />
+      <NavBar />
+      <ContractData />
+      <TableContent />
     </>
   );
 }

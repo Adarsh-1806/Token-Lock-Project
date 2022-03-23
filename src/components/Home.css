@@ -1,9 +1,14 @@
 .section-item {
-  background-color: rgb(54, 109, 203);
+  background-color: #4b81df;
+  border-radius: 7px;
 }
-.explore-container {
-  background-color: rgb(243, 247, 250);
+.moreinfo-container {
+  overflow-y: auto;
 }
-.info-card {
-  min-width: 200px;
+.itemImage {
+  max-width: 100px;
+}
+.item {
+  max-width: 300px;
+  min-width: 250px;
 }

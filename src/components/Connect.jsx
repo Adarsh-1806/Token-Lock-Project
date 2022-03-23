@@ -7,6 +7,7 @@ function Connect() {
   const state = useSelector((state) => state.connectMetamask);
   const dispatch = useDispatch();
   state.then((dt) => {
+    console.log(dt);
     setData(dt);
   });
   window.ethereum.enable();
@@ -55,7 +56,6 @@ function Connect() {
                   </a>
                 </li>
               </ul>
-              {/*right part */}
               <div className="d-flex  ">
                 <div className="d-flex">
                   <p className=" dataspan pt-3 mb-0 px-2 accdiv">

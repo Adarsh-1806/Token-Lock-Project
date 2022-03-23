@@ -87,9 +87,14 @@ function ContractData() {
           <button
             className="w-50 m-2 btn btn-secondary"
             disabled={ifConnected}
-            onClick={() =>
-              dispatch(getContract(tokenRef.current.value, signer, account))
-            }
+            onClick={() => {
+              if (tokenRef.current.value === "") return;
+              try {
+                dispatch(getContract(tokenRef.current.value, signer, account));
+              } catch (error) {
+                console.log(error);
+              }
+            }}
           >
             Address
           </button>
