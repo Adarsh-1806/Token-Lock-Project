@@ -1,47 +1,102 @@
 import { ethers } from "ethers";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Lock from "../artifacts/contracts/Lock.sol/Lock.json";
+import Token from "../artifacts/contracts/Token.sol/Token.json";
+import SimpleDateTime from "react-simple-timestamp-to-date";
+import eth from "./images/eth.svg";
+import { ProgressBar } from "react-bootstrap";
 function AllTransactions() {
+  const [transaction, setTransaction] = useState([]);
   useEffect(() => {
     const onLoad = async () => {
       const provider = new ethers.providers.JsonRpcProvider();
       const lockAddress = process.env.REACT_APP_CONTRACTADDRESS;
       const contract = new ethers.Contract(lockAddress, Lock.abi, provider);
-      console.log(lockAddress);
+      const Ids = await contract.getAllIds();
+      const txs = [];
+      for (let i = 0; i < Ids.length; i++) {
+        const e = Ids[i];
+        const data = await contract.getDetailsOf(e);
+        const tokenContract = new ethers.Contract(
+          data.tokenAddress,
+          Token.abi,
+          provider
+        );
+        const name = await tokenContract.name();
+        const symbol = await tokenContract.symbol();
+        const lockedTime = parseInt(data.lockedTime._hex, 16);
+        const unlockTime = parseInt(data.unlockTime._hex, 16);
+        const progressBar =
+          ((Date.now() / 1000 - lockedTime) * 100) / (unlockTime - lockedTime);
+        const obj = {
+          id: parseInt(data.id._hex, 16),
+          owner: data.owner,
+          tokenAddress: data.tokenAddress,
+          name: name,
+          symbol: symbol,
+          withdrawed: data.withdrawed,
+          amount: parseInt(data.amount._hex, 16),
+          lockedTime: lockedTime,
+          unlockTime: unlockTime,
+          progressBar: progressBar,
+        };
+        txs.push(obj);
+      }
+      setTransaction(txs);
     };
     onLoad();
   }, []);
   return (
     <>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
-      </table>
+      {transaction.length === 0 ? (
+        <h1>No Data Available</h1>
+      ) : (
+        <>
+          <table className="table m-3 border overflow-auto">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Token</th>
+                <th scope="col">Blockchain</th>
+                <th scope="col">Token Locked</th>
+                <th scope="col">LockedTime</th>
+                <th scope="col">Unlock In</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transaction.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.name}</td>
+                  <td>{item.symbol}</td>
+                  <td>
+                    <img src={eth} style={{ height: "17px" }} /> ETH
+                  </td>
+                  <td>{item.amount}</td>
+                  <td>
+                    <SimpleDateTime
+                      dateFormat="DMY"
+                      dateSeparator="/"
+                      timeSeparator=":"
+                    >
+                      {item.lockedTime}
+                    </SimpleDateTime>
+                  </td>
+                  <td>
+                    <SimpleDateTime
+                      dateFormat="DMY"
+                      dateSeparator="/"
+                      timeSeparator=":"
+                    >
+                      {item.unlockTime}
+                    </SimpleDateTime>
+                    <ProgressBar now={item.progressBar} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
     </>
   );
 }

@@ -42,7 +42,7 @@ export default function Footer() {
             <li className="my-2">Twitter</li>
           </div>
         </div>
-        <div className="col-lg-3 col-md-3 col">
+        <div className="col-lg-3 col-md-4 col">
           <p>© 2022 All Rights Resevied</p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import NavBar from "./NavBar";
 import lock from "./images/lock.svg";
 import sell from "./images/sell.svg";
+import doller from "./images/doller.png";
 import laptop from "./images/laptop.svg";
 import Footer from "./Footer";
 import AllTransactions from "./AllTransactions";
@@ -20,18 +21,22 @@ function Home() {
           </p>
         </div>
         <div className="d-flex justify-content-center pb-5">
-          <div className="d-flex p-3 section-item mx-auto">
-            <div className="image-item  my-auto">Image</div>
+          <div className="d-flex p-3 section-item mx-auto ">
+            <div className="image-item p-1 mx-2 my-auto rounded-circle bg-white d-flex justify-content-center align-items-center">
+              <img src={lock} alt="lock" style={{ height: "35px" }} />
+            </div>
             <div className="content-item section-item ">
-              <h1>$ 6,158,871,211.97</h1>
+              <h2>$ 6,158,871,211.97</h2>
               <p className="text-white">Total Locked Token Value</p>
             </div>
           </div>
           <div className="d-flex p-3 section-item mx-auto">
-            <div className="image-item  my-auto">Image</div>
+            <div className="image-item p-1 mx-2 my-auto rounded-circle bg-white d-flex justify-content-center align-items-center">
+              <img src={doller} alt="lock" style={{ height: "35px" }} />
+            </div>
             <div className="content-item section-item ">
-              <h1>$ 6,158,871,211.97</h1>
-              <p className="text-white">Total Locked Token Value</p>
+              <h2>255547</h2>
+              <p className="text-white">Total Locked Projects</p>
             </div>
           </div>
         </div>

@@ -141,7 +141,6 @@ function TableContent() {
                     withdraw
                   </button>
                 </td>
-                <td />
               </tr>
             ))}
           </tbody>

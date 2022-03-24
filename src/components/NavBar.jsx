@@ -93,7 +93,6 @@ function NavBar() {
                   onClick={(e) => {
                     e.preventDefault();
                     dispatch(connect());
-                    // window.location.reload();
                   }}
                 >
                   Connect
