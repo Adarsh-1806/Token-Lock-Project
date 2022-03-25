@@ -6,7 +6,6 @@ import Home from "./components/Home";
 import Lockup from "./components/Lockup";
 import About from "./components/About";
 import ClaimToken from "./components/ClaimToken";
-
 function App() {
   return (
     <Router>

@@ -39,8 +39,16 @@ function ClaimToken() {
         const symbol = await tokenContract.symbol();
         const lockedTime = parseInt(dt.lockedTime._hex, 16);
         const unlockTime = parseInt(dt.unlockTime._hex, 16);
+        let varient = "";
         const progressBar =
           ((Date.now() / 1000 - lockedTime) * 100) / (unlockTime - lockedTime);
+        if (progressBar > 80) {
+          varient = "success";
+        } else if (progressBar > 40) {
+          varient = "warning";
+        } else {
+          varient = "danger";
+        }
         const obj = {
           id: parseInt(dt.id._hex, 16),
           owner: dt.owner,
@@ -52,6 +60,7 @@ function ClaimToken() {
           lockedTime: lockedTime,
           unlockTime: unlockTime,
           progressBar: progressBar,
+          varient: varient,
         };
         txs.push(obj);
         console.log(obj);
@@ -115,7 +124,10 @@ function ClaimToken() {
                           >
                             {item.unlockTime}
                           </SimpleDateTime>
-                          <ProgressBar now={item.progressBar} />
+                          <ProgressBar
+                            variant={item.varient}
+                            now={item.progressBar}
+                          />
                         </td>
                         <td>
                           <button

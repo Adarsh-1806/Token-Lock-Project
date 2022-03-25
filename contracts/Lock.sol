@@ -107,7 +107,6 @@ contract Lock {
         uint256 _amount = lockedTokens[_id].amount;
         address _tokenAddress = lockedTokens[_id].tokenAddress;
         Token(_tokenAddress).transfer(msg.sender, _amount);
-        lockedTokens[_id].amount = 0;
         lockedTokens[_id].withdrawed = true;
 
         emit withdrawComplete(address(this), msg.sender, _amount);
