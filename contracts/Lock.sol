@@ -12,8 +12,9 @@ contract Lock {
         uint256 amount;
         bool withdrawed;
     }
-    uint256 id = 1;
+    uint256 public id = 1;
     uint256[] allIds;
+    uint256 public totolAmount = 0;
     mapping(uint256 => Details) lockedTokens;
     mapping(address => uint256[]) depositor;
     mapping(address => uint256[]) tokenDetail;
@@ -43,6 +44,7 @@ contract Lock {
         lockedTokens[id].amount = _amount;
         lockedTokens[id].withdrawed = false;
 
+        totolAmount += _amount;
         myBalance[msg.sender][_tokenAddress] += _amount;
         depositor[msg.sender].push(id);
         allIds.push(id);

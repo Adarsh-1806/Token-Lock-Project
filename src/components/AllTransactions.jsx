@@ -26,8 +26,16 @@ function AllTransactions() {
         const symbol = await tokenContract.symbol();
         const lockedTime = parseInt(data.lockedTime._hex, 16);
         const unlockTime = parseInt(data.unlockTime._hex, 16);
+        let varient = "";
         const progressBar =
           ((Date.now() / 1000 - lockedTime) * 100) / (unlockTime - lockedTime);
+        if (progressBar > 80) {
+          varient = "success";
+        } else if (progressBar > 40) {
+          varient = "warning";
+        } else {
+          varient = "danger";
+        }
         const obj = {
           id: parseInt(data.id._hex, 16),
           owner: data.owner,
@@ -39,6 +47,7 @@ function AllTransactions() {
           lockedTime: lockedTime,
           unlockTime: unlockTime,
           progressBar: progressBar,
+          varient: varient,
         };
         txs.push(obj);
       }
@@ -89,7 +98,10 @@ function AllTransactions() {
                     >
                       {item.unlockTime}
                     </SimpleDateTime>
-                    <ProgressBar now={item.progressBar} />
+                    <ProgressBar
+                      now={item.progressBar}
+                      variant={item.varient}
+                    />
                   </td>
                 </tr>
               ))}

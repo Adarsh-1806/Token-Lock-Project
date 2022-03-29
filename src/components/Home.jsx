@@ -5,8 +5,22 @@ import doller from "./images/doller.png";
 import laptop from "./images/laptop.svg";
 import Footer from "./Footer";
 import AllTransactions from "./AllTransactions";
+import { useEffect, useState } from "react";
+import Lock from "../artifacts/contracts/Lock.sol/Lock.json";
+import { ethers } from "ethers";
 import "./Home.css";
 function Home() {
+  const [amount, setAmount] = useState(0);
+  useEffect(() => {
+    const onLoad = async () => {
+      const provider = new ethers.providers.JsonRpcProvider();
+      const lockAddress = process.env.REACT_APP_CONTRACTADDRESS;
+      const contract = new ethers.Contract(lockAddress, Lock.abi, provider);
+      const amount = await contract.totolAmount();
+      setAmount(parseInt(amount._hex, 16));
+    };
+    onLoad();
+  }, []);
   return (
     <>
       <section className="container-fluid bg-primary text-white">
@@ -26,7 +40,7 @@ function Home() {
               <img src={lock} alt="lock" style={{ height: "35px" }} />
             </div>
             <div className="content-item section-item ">
-              <h2>$ 6,158,871,211.97</h2>
+              <h2>$ {amount}</h2>
               <p className="text-white">Total Locked Token Value</p>
             </div>
           </div>

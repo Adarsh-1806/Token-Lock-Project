@@ -2,11 +2,8 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import Content from "./Content";
 import SimpleDateTime from "react-simple-timestamp-to-date";
-/**
- *
- *
- * @return {*}
- */
+import { ProgressBar } from "react-bootstrap";
+
 function TableContent() {
   const stateData = useSelector((state) => state.getContract);
   const connectdata = useSelector((state) => state.connectMetamask);
@@ -23,23 +20,6 @@ function TableContent() {
   }
   if (contract !== null) {
     contract.on("TokenTransfered", async (sender, reciever, value) => {
-      /* const arr = await contract.myTransactions();
-      const tnx = transaction;
-      if (arr.length == tnx.length + 1) {
-        const e = parseInt(arr[arr.length - 1]._hex, 16);
-        const trns = await contract.getDetailsOf(e);
-        const obj = {
-          id: parseInt(trns.id._hex, 16),
-          owner: trns.owner,
-          tokenAddress: trns.tokenAddress,
-          withdrawed: trns.withdrawed,
-          amount: parseInt(trns.amount._hex, 16),
-          lockedTime: parseInt(trns.lockedTime._hex, 16),
-          unlockTime: parseInt(trns.unlockTime._hex, 16),
-        };
-        tnx.push(obj);
-        setTransaction(tnx);
-      }*/
       await getdata();
     });
   }
@@ -54,14 +34,28 @@ function TableContent() {
     for (let i = 0; i < arr.length; i++) {
       const e = parseInt(arr[i]._hex, 16);
       const trns = await contract.getDetailsOf(e);
+      const lockedTime = parseInt(trns.lockedTime._hex, 16);
+      const unlockTime = parseInt(trns.unlockTime._hex, 16);
+      let varient = "";
+      const progressBar =
+        ((Date.now() / 1000 - lockedTime) * 100) / (unlockTime - lockedTime);
+      if (progressBar > 80) {
+        varient = "success";
+      } else if (progressBar > 40) {
+        varient = "warning";
+      } else {
+        varient = "danger";
+      }
       const obj = {
         id: parseInt(trns.id._hex, 16),
         owner: trns.owner,
         tokenAddress: trns.tokenAddress,
         withdrawed: trns.withdrawed,
         amount: parseInt(trns.amount._hex, 16),
-        lockedTime: parseInt(trns.lockedTime._hex, 16),
-        unlockTime: parseInt(trns.unlockTime._hex, 16),
+        lockedTime: lockedTime,
+        unlockTime: unlockTime,
+        progressBar: progressBar,
+        varient: varient,
       };
       tnx.push(obj);
     }
@@ -130,6 +124,7 @@ function TableContent() {
                   >
                     {item.unlockTime}
                   </SimpleDateTime>
+                  <ProgressBar variant={item.varient} now={item.progressBar} />
                 </td>
                 <td className="ownerCell">{item.owner}</td>
                 <td>
