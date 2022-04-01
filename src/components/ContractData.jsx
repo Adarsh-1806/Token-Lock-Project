@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { Alert } from "react-alert";
 import { useSelector, useDispatch } from "react-redux";
 import CardComponent from "./CardComponent";
 import { getContract } from "../actions/index";
@@ -88,7 +87,15 @@ function ContractData() {
             className="w-50 m-2 btn btn-secondary"
             disabled={ifConnected}
             onClick={() => {
-              if (tokenRef.current.value === "") return;
+              if (tokenRef.current.value === "") {
+                alert("Address is empty");
+                return;
+              }
+              if (tokenRef.current.value.toString().length !== 42) {
+                alert("invalid token address");
+                console.log(tokenRef.current.value.toString().length);
+                return;
+              }
               try {
                 dispatch(getContract(tokenRef.current.value, signer, account));
               } catch (error) {

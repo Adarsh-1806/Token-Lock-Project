@@ -15,7 +15,7 @@ function ClaimToken() {
   const [contract, setContract] = useState({});
   const [transaction, setTransaction] = useState([]);
   const state = useSelector((state) => state.connectMetamask);
-  const cnt = 0;
+  var cnt = 0;
   state.then((dt) => {
     setData(dt);
   });

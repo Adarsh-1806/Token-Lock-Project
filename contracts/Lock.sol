@@ -20,7 +20,12 @@ contract Lock {
     mapping(address => uint256[]) tokenDetail;
     mapping(address => mapping(address => uint256)) myBalance;
 
-    event TokenTransfered(address _from, address _to, uint256 _value);
+    event TokenTransfered(
+        address _from,
+        address _to,
+        uint256 _value,
+        uint256 _id
+    );
     event withdrawComplete(address _from, address _to, uint256 _value);
 
     /**
@@ -49,8 +54,8 @@ contract Lock {
         depositor[msg.sender].push(id);
         allIds.push(id);
         tokenDetail[_tokenAddress].push(id);
+        emit TokenTransfered(msg.sender, address(this), _amount, id);
         id++;
-        emit TokenTransfered(msg.sender, address(this), _amount);
     }
 
     /**
