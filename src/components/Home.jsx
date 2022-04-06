@@ -11,12 +11,15 @@ import { ethers } from "ethers";
 import "./Home.css";
 function Home() {
   const [amount, setAmount] = useState(0);
+  const [locks, setLocks] = useState(0);
   useEffect(() => {
     const onLoad = async () => {
       const provider = new ethers.providers.JsonRpcProvider();
       const lockAddress = process.env.REACT_APP_CONTRACTADDRESS;
       const contract = new ethers.Contract(lockAddress, Lock.abi, provider);
       const amount = await contract.totolAmount();
+      const totalLock = await contract.id();
+      setLocks(parseInt(totalLock._hex, 16) - 1);
       setAmount(parseInt(amount._hex, 16));
     };
     onLoad();
@@ -49,7 +52,7 @@ function Home() {
               <img src={doller} alt="lock" style={{ height: "35px" }} />
             </div>
             <div className="content-item section-item ">
-              <h2>255547</h2>
+              <h2>{locks}</h2>
               <p className="text-white">Total Locked Projects</p>
             </div>
           </div>

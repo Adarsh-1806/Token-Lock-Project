@@ -1,4 +1,7 @@
 const hre = require("hardhat");
+const fs = require("fs");
+const os = require("os");
+
 async function main() {
   const Token = await hre.ethers.getContractFactory("Token");
   const token = await Token.deploy(1000000);
@@ -11,6 +14,18 @@ async function main() {
   const lock = await Lock.deploy();
   await lock.deployed();
   console.log("Lock contract address:", lock.address);
+
+  function setEnvValue(key, value) {
+    const ENV_VARS = fs.readFileSync(".env", "utf8").split(os.EOL);
+    const target = ENV_VARS.indexOf(
+      ENV_VARS.find((line) => {
+        return line.match(new RegExp(key));
+      })
+    );
+    ENV_VARS.splice(target, 1, `${key}=${value}`);
+    fs.writeFileSync(".env", ENV_VARS.join(os.EOL));
+  }
+  setEnvValue("REACT_APP_CONTRACTADDRESS", lock.address);
 }
 
 main()
