@@ -58,7 +58,7 @@ function AllTransactions() {
   return (
     <>
       {transaction.length === 0 ? (
-        <h1>No Data Available</h1>
+        <h1 className="text-center my-5">No Data Available</h1>
       ) : (
         <>
           <table className="table m-3 border overflow-auto">

@@ -37,8 +37,8 @@ function Home() {
             Liquidity Locking & Team Vesting for Token Founders and Community
           </p>
         </div>
-        <div className="d-flex justify-content-center pb-5">
-          <div className="d-flex p-3 section-item mx-auto ">
+        <div className="d-flex flex-wrap justify-content-center pb-5">
+          <div className="d-flex p-3 section-item mx-auto my-3">
             <div className="image-item p-1 mx-2 my-auto rounded-circle bg-white d-flex justify-content-center align-items-center">
               <img src={lock} alt="lock" style={{ height: "35px" }} />
             </div>
@@ -47,7 +47,7 @@ function Home() {
               <p className="text-white">Total Locked Token Value</p>
             </div>
           </div>
-          <div className="d-flex p-3 section-item mx-auto">
+          <div className="d-flex p-3 section-item mx-auto my-3">
             <div className="image-item p-1 mx-2 my-auto rounded-circle bg-white d-flex justify-content-center align-items-center">
               <img src={doller} alt="lock" style={{ height: "35px" }} />
             </div>
@@ -58,10 +58,10 @@ function Home() {
           </div>
         </div>
       </section>
-      <section className="explore-container">
+      <section className="explore-container ">
         <AllTransactions />
       </section>
-      <section className="moreinfo-container d-flex justify-content-center">
+      <section className="moreinfo-container d-flex flex-wrap justify-content-center">
         <div className="item m-3">
           <div className="item-image d-flex justify-content-center">
             <img src={lock} className="card-img-top itemImage" alt="lock" />
